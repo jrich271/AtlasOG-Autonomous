@@ -1,0 +1,7 @@
+streamlit
+pandas
+requests
+python-dateutil
+gspread
+oauth2client
+google-api-python-client
