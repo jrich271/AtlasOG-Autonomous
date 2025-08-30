@@ -38,6 +38,30 @@ if tab == "📈 Markets":
                 st.warning("No data found for this ticker.")
         except Exception as e:
             st.error(f"Error fetching data: {e}")
+            # -----------------------------
+# Tab 2: AI Assistant
+# -----------------------------
+if tab == "🤖 AI Assistant":
+    st.header("Atlas AI Assistant")
+    
+    # Make sure your OpenAI API key is set in Streamlit Secrets as OPENAI_API_KEY
+    openai.api_key = st.secrets.get("OPENAI_API_KEY", "") or os.getenv("OPENAI_API_KEY", "")
+    
+    user_prompt = st.text_area("Ask Atlas something:", "")
+    
+    if st.button("Run AI"):
+        if not openai.api_key:
+            st.warning("No OpenAI API key found. Add it in Streamlit Secrets as OPENAI_API_KEY.")
+        else:
+            try:
+                import openai
+                response = openai.ChatCompletion.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": user_prompt}]
+                )
+                st.success(response["choices"][0]["message"]["content"])
+            except Exception as e:
+                st.error(f"Error running AI: {e}")
 # =============== CONFIG ===============
 st.set_page_config(page_title="AtlasOG – Monetization Hub", layout="wide")
 st.title("🌍 AtlasOG – Real-World Monetization Hub")
