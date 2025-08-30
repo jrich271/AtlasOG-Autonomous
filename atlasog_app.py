@@ -8,7 +8,36 @@ from random import choice, randint
 import streamlit as st
 import pandas as pd
 import requests
+# -----------------------------
+# Sidebar Navigation
+# -----------------------------
+tab = st.sidebar.radio("Navigate", [
+    "📈 Markets",
+    "🤖 AI Assistant",
+    "💸 Revenue Tracker"
+])# -----------------------------
+# Tab 1: Markets (Live Data)
+# -----------------------------
+if tab == "📈 Markets":
+    st.header("Live Market Data & Asset Tracker")
+    
+    # Input ticker
+    ticker = st.text_input("Enter a stock/crypto ticker (e.g., AAPL, BTC-USD):", "AAPL")
+    
+    if ticker:
+        try:
+            import yfinance as yf
+            from datetime import datetime
 
+            data = yf.download(ticker, period="5d", interval="1h")
+            if not data.empty:
+                st.line_chart(data["Close"])
+                st.write(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                st.dataframe(data.tail())
+            else:
+                st.warning("No data found for this ticker.")
+        except Exception as e:
+            st.error(f"Error fetching data: {e}")
 # =============== CONFIG ===============
 st.set_page_config(page_title="AtlasOG – Monetization Hub", layout="wide")
 st.title("🌍 AtlasOG – Real-World Monetization Hub")
